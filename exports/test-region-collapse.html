@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>区域折叠占位测试</title>
+  <style>
+    body { background:#111; color:#eee; font-family: Inter, 'Noto Sans SC', sans-serif; }
+    .status-preview-wrapper { width: min(720px, 92vw); margin: 28px auto; padding: 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.15); box-shadow: 0 12px 28px rgba(0,0,0,.35); background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.08)); }
+    .st-region { margin: 0 0 16px 0; }
+    .st-region-header { display:flex; align-items:center; gap:10px; padding:10px 12px; border:1px solid rgba(255,255,255,.15); border-radius:10px; background: rgba(255,255,255,.06); cursor:pointer; }
+    .st-region-body { padding: 12px; margin-top: 8px; border-radius: 10px; background: rgba(255,255,255,.06); }
+    .st-region-toggle { font-size: 14px; }
+    .st-region-title { font-weight: 600; }
+    /* collapsed: 完全收缩（无占位空白） */
+    .st-region.collapsed > .st-region-body { display:none !important; margin:0 !important; padding:0 !important; }
+    .st-region.collapsed { margin-bottom:0 !important; }
+    .st-region.collapsed .st-region-header { margin-bottom:0 !important; }
+    .st-region-toggle.rotatable { display:inline-block; transition: transform .25s ease; }
+    .st-region.collapsed .st-region-toggle.rotatable { transform: rotate(-90deg); }
+  </style>
+</head>
+<body>
+  <section id="ny-status" class="status-preview-wrapper">
+    <div class="st-region">
+      <div class="st-region-header" data-toggle-mode="header" title="折叠/展开">
+        <span class="st-region-toggle rotatable">▾</span>
+        <span class="st-region-title">测试区域</span>
+      </div>
+      <div class="st-region-body">
+        <p>第1段：这是一段示例文本，用于填充高度，观察折叠后是否无占位。</p>
+        <p>第2段：更多内容，模拟较长的区域主体。</p>
+        <p>第3段：更多内容，模拟较长的区域主体。</p>
+        <p>第4段：更多内容，模拟较长的区域主体。</p>
+        <p>第5段：更多内容，模拟较长的区域主体。</p>
+        <p>第6段：更多内容，模拟较长的区域主体。</p>
+        <p>第7段：更多内容，模拟较长的区域主体。</p>
+        <p>第8段：更多内容，模拟较长的区域主体。</p>
+        <p>第9段：更多内容，模拟较长的区域主体。</p>
+        <p>第10段：更多内容，模拟较长的区域主体。</p>
+      </div>
+    </div>
+    <div style="height:24px; display:grid; place-items:center; color:#bbb;">底部参考线</div>
+  </section>
+  <script>
+    document.addEventListener('click', function(e){
+      var hdr = e.target && e.target.closest ? e.target.closest('.st-region-header') : null;
+      if(!hdr) return;
+      var box = hdr.closest ? hdr.closest('.st-region') : null;
+      var body = box ? box.querySelector('.st-region-body') : null;
+      var icon = hdr.querySelector('.st-region-toggle');
+      var isCol = box.classList.contains('collapsed');
+      if(!isCol){
+        box.classList.add('collapsed');
+        if(body) body.style.display = 'none';
+        if(icon) icon.textContent = '▶';
+      }else{
+        box.classList.remove('collapsed');
+        if(body) body.style.display = '';
+        if(icon) icon.textContent = '▾';
+      }
+    }, true);
+  </script>
+</body>
+</html>
